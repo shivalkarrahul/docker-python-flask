@@ -6,6 +6,42 @@ Dockerize Your Flask Python Application
 
 This project demonstrates how to Dockerize a Flask application and set it up on an AWS EC2 instance. You can choose to run the application either manually using `docker run` commands or easily with Docker Compose.
 
+## Architectural Diagram
+
+The architectural diagram below illustrates the components and their interactions in this project. 
+
+![Architectural Diagram](images/architecture-diagram.png)
+
+## Understand the Application
+
+### Flask Application
+
+The Flask application is a Python web application built using the Flask framework. Flask is a lightweight web framework that is easy to set up and scale. It is used here to create a simple web service with a few endpoints.
+
+**Files in the Flask Folder:**
+
+- **`Dockerfile`**: This file contains the instructions to build a Docker image for the Flask application. It sets up the environment, installs dependencies, and defines how to run the Flask application.
+
+- **`main.py`**: This is the main application file where the Flask web server is defined. It includes the routes and logic for handling HTTP requests.
+
+- **`requirements.txt`**: This file lists the Python dependencies required for the Flask application. Docker uses this file to install the necessary packages inside the Docker container.
+
+### Nginx Proxy
+
+Nginx is used as a reverse proxy server to forward requests to the Flask application. It handles incoming HTTP requests and directs them to the Flask application container.
+
+**Files in the Nginx Folder:**
+
+- **`Dockerfile`**: This file contains the instructions to build a Docker image for the Nginx server. It sets up Nginx with the required configuration to serve as a reverse proxy.
+
+- **`conf`**: This folder contains the Nginx configuration files. The primary configuration file, `default.conf`, sets up the proxy rules, such as forwarding requests to the Flask application and handling static files.
+
+### Redis
+
+In this setup, Redis is used solely to keep track of the application hit count. The Redis container is configured to work with the Flask application but does not have any associated files or directories in this project. 
+
+
+
 ## Setup Instructions
 
 ### Create an EC2 Instance on AWS

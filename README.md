@@ -1,116 +1,208 @@
 # docker-python-flask
 
-Dockerize Flask Python Application
+Dockerize Your Flask Python Application
+
+## Overview
+
+This project demonstrates how to Dockerize a Flask application and set it up on an AWS EC2 instance. You can choose to run the application either manually using `docker run` commands or easily with Docker Compose.
 
 ## Setup Instructions
 
-### Create an EC2 Instance
+### Create an EC2 Instance on AWS
 
-1. **Ubuntu Version:** 22
-2. **AMI:** ami-0e86e20dae9224db8
-3. **Volume Size:** 30 GBs
-4. **Instance Type:** t2.medium
+1. **Select Ubuntu Version:** 24.04 LTS
+2. **Amazon Machine Image (AMI):** Ubuntu Server 24.04 LTS (HVM), SSD Volume Type (ami-0e86e20dae9224db8)
+3. **Volume Size:** 30 GB (8 GB will also work)
+4. **Instance Type:** t2.medium (t2.micro is also acceptable)
 5. **Subnet:** Public
-6. **SSH Key:** `workshop-docker-python-flask.pem`
-7. **Security Group:** Allow SSH(22) and HTTP(80) for your IP
+6. **SSH Key:** `workshop-docker-python-flask.pem` (Download the key on your machine)
+7. **Security Group:** Allow SSH (port 22) and HTTP (port 80) for your IP
 
 ### Commands on Your Local Machine
 
-1. Set the correct permissions for your SSH key:
+1. **Set Permissions for Your SSH Key:**
 
     ```bash
     chmod 400 ~/Downloads/workshop-docker-python-flask.pem
     ```
 
-2. SSH into the EC2 instance:
+2. **SSH into Your EC2 Instance:**
 
     ```bash
-    ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@ec2-184-72-166-229.compute-1.amazonaws.com
+    ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@<EC2-Public-IP>
     ```
 
-### Commands on the EC2 Instance
+### Setup Docker on the EC2 Instance
 
 1. **Install Docker:**
 
-    - Add Docker's official GPG key:
+    - **Update the package index and install prerequisites:**
 
         ```bash
         sudo apt-get update
+        ```
+
+        ```bash
         sudo apt-get install ca-certificates curl
-        sudo install -m 0755 -d /etc/apt/keyrings
-        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-        sudo chmod a+r /etc/apt/keyrings/docker.asc
         ```
 
-    - Add the repository to Apt sources:
+    - **Add Docker’s GPG key:**
 
         ```bash
-        echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-          $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-          sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        ```
+
+    - **Add Docker’s repository:**
+
+        ```bash
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        ```
+
+    - **Install Docker:**
+
+        ```bash
         sudo apt-get update
         ```
 
-    - Install the latest version of Docker:
-
         ```bash
-        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
         ```
 
-    - Verify the installation:
+    - **Verify Docker Installation:**
 
         ```bash
         sudo docker run hello-world
         ```
 
-    - Manage Docker as a non-root user:
+    - **Allow Non-Root User to Run Docker Commands:**
 
-        - Create the Docker group:
+        ```bash
+        sudo groupadd docker
+        ```
 
-            ```bash
-            sudo groupadd docker
-            ```
+        ```bash
+        sudo usermod -aG docker $USER
+        ```
 
-        - Add your user to the Docker group:
+        ```bash
+        newgrp docker
+        ```
 
-            ```bash
-            sudo usermod -aG docker $USER
-            ```
-
-        - Activate the changes to groups:
-
-            ```bash
-            newgrp docker
-            ```
-
-        - Verify that you can run Docker commands without `sudo`:
-
-            ```bash
-            docker run hello-world
-            ```
-
-2. **Clone the Repository and Run the Application:**
+2. **Clone the Project Repository:**
 
     ```bash
     cd /home/ubuntu/
+    ```
+
+    ```bash
     git clone https://github.com/shivalkarrahul/docker-python-flask.git
+    ```
+
+    ```bash
     cd docker-python-flask/
+    ```
+
+### Run the Application Manually
+
+If you prefer to start each container manually, follow these steps:
+
+1. **Start the Redis Container:**
+
+    ```bash
+    docker run -d --name redis redis:alpine
+    ```
+
+2. **Build and Start the Flask Application Container:**
+
+    ```bash
+    docker build -t flask flask/
+    ```
+
+    ```bash
+    docker run -d --name app --link redis:redis -p 8000:8000 -v app:/app flask
+    ```
+
+3. **Build and Start the Nginx Proxy Container:**
+
+    ```bash
+    docker build -t nginx nginx/
+    ```
+
+    ```bash
+    docker run -d --name proxy --link app:app -p 80:80 --restart always nginx
+    ```
+
+### Alternative: Using Docker Compose
+
+For a simpler setup, you can use Docker Compose to manage all containers with a single command. Docker Compose can start the containers in the foreground or background, depending on your preference:
+
+
+- **Start Containers in the Foreground:**
+
+    ```bash
     docker compose up
     ```
 
+    This command will start all containers and keep the terminal open with their logs.
+
+- **Stop Containers running in the Foreground:**
+
+    Press `Ctrl + C` in the terminal where `docker compose up` is running.
+
+- **Start Containers in the Background:**
+
+    If you want to run the containers in the background, add the `-d` flag:
+
+    ```bash
+    docker compose up -d
+    ```
+
+    This command will start the containers in detached mode, allowing you to continue using the terminal.
+
+- **Stop and Remove Containers:**
+
+    To stop and remove all containers created by Docker Compose, use:
+
+    ```bash
+    docker compose down
+    ```
+
+    This command will stop and clean up the containers, networks, and volumes defined in the `docker-compose.yml` file.
+
+
 ### Access the Application
 
-You can access the application at the following URLs:
+- **Restart Containers:**
 
-- [http://EC2-Public-IP:80/](http://EC2-Public-IP:80/)
-- [http://EC2-Public-IP:80/hit](http://EC2-Public-IP:80/hit)
-- [http://EC2-Public-IP:80/hit/reset](http://EC2-Public-IP:80/hit/reset)
+    As we have stopped the containers, start them again to access the application:
+
+    ```bash
+    docker compose up -d
+    ```
+
+Once the application containers are running, you can access the application through your web browser:
+
+- **Home Page:** [http://EC2-Public-IP:80/](http://EC2-Public-IP:80/)
+- **Hit Endpoint:** [http://EC2-Public-IP:80/hit](http://EC2-Public-IP:80/hit)
+- **Reset Endpoint:** [http://EC2-Public-IP:80/hit/reset](http://EC2-Public-IP:80/hit/reset)
+
+Replace `EC2-Public-IP` with your EC2 instance's actual public IP address.
+
 
 ### Cleanup
 
 To stop the application and clean up:
 
-1. Press `Ctrl + C` in the terminal where `docker compose up` is running.
-2. Terminate the EC2 instance.
+1. **Stop Containers:**
+
+    ```bash
+    docker compose down
+    ```
+
+2. **Terminate the EC2 Instance:**
+
+    Go to the AWS Management Console and terminate the EC2 instance to avoid incurring additional charges.
+
+
+Feel free to reach out if you encounter any issues or have questions!    
     

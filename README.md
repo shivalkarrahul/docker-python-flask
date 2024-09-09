@@ -171,6 +171,13 @@ If you prefer to start each container manually, follow these steps:
     docker run -d --name proxy --link app:app -p 80:80 --restart always nginx
     ```
 
+4. **Stop the Nginx Proxy, Flask and Redis Container:**
+
+    ```bash
+    docker stop proxy app redis
+    ```
+    
+
 ### Alternative: Using Docker Compose
 
 For a simpler setup, you can use Docker Compose to manage all containers with a single command. Docker Compose can start the containers in the foreground or background, depending on your preference:

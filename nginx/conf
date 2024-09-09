@@ -1,0 +1,13 @@
+server {
+    listen       80;
+    server_name  localhost;
+    location / {
+        proxy_pass   http://app:8000;
+    }
+    location /hit {
+        proxy_pass   http://app:8000/visitor;
+    }
+    location /hit/reset {
+        proxy_pass   http://app:8000/visitor/reset;
+    }
+}

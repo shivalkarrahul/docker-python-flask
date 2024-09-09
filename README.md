@@ -14,6 +14,9 @@ The architectural diagram below illustrates the components and their interaction
 
 ## Understand the Application
 
+<details>
+  <summary>Click to expand application details</summary>
+
 ### Flask Application
 
 The Flask application is a Python web application built using the Flask framework. Flask is a lightweight web framework that is easy to set up and scale. It is used here to create a simple web service with a few endpoints.
@@ -40,7 +43,7 @@ Nginx is used as a reverse proxy server to forward requests to the Flask applica
 
 In this setup, Redis is used solely to keep track of the application hit count. The Redis container is configured to work with the Flask application but does not have any associated files or directories in this project. 
 
-
+</details>
 
 ## Setup Instructions
 

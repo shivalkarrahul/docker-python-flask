@@ -45,7 +45,214 @@ In this setup, Redis is used solely to keep track of the application hit count. 
 
 </details>
 
-## Setup Instructions
+## Manual Setup Instructions
+
+<details>
+  <summary>To understand how the application is configured and run without Docker, you can expand this section. If you're eager to jump directly to the Dockerized setup, you can skip this part.</summary>
+  
+<br>Before diving into the Dockerized setup of the Python Flask application, it’s valuable to understand the manual setup process. This section provides step-by-step instructions on how to set up the application from scratch without using Docker. By following these steps, you'll gain insights into the components involved and how they interact.
+
+### Create an EC2 Instance on AWS
+
+1. **Select Ubuntu Version:** 24.04 LTS
+2. **Amazon Machine Image (AMI):** Ubuntu Server 24.04 LTS (HVM), SSD Volume Type (ami-0e86e20dae9224db8)
+3. **Volume Size:** 30 GB (8 GB will also work)
+4. **Instance Type:** t2.medium (t2.micro is also acceptable)
+5. **Subnet:** Public
+6. **SSH Key:** `workshop-docker-python-flask.pem` (Download the key on your machine)
+7. **Security Group:** Allow SSH (port 22) and HTTP (port 80) for your IP
+
+### Commands on Your Local Machine
+
+1. **Set Permissions for Your SSH Key:**
+
+    ```bash
+    chmod 400 ~/Downloads/workshop-docker-python-flask.pem
+    ```
+
+2. **SSH into Your EC2 Instance:**
+
+    ```bash
+    ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@<EC2-Public-IP>
+    ```
+
+3. **Update and install necessary packages**
+    ```bash
+    sudo apt update
+    ```
+
+    ```bash
+    sudo apt install python3-pip nginx redis-server
+    ```
+
+4. **Create directories and files for the Flask app**
+    ```bash
+    mkdir -p ~/my_flask_app
+    ```
+    
+    ```bash
+    cd ~/my_flask_app
+    ```
+
+    ```bash
+    mkdir flask
+    ```
+
+    ```bash
+    cd flask
+    ```
+
+    ```bash
+    touch requirements.txt main.py
+    ```
+
+6. **Edit the `main.py` file**
+    ```bash
+    vim main.py
+    ```
+
+    Add the following code:
+    ```python
+    import redis
+    from flask import Flask
+    app = Flask(__name__)
+    redis = redis.Redis(host='0.0.0.0', port=6379, db=0)
+
+    @app.route('/')
+    def hello_world():
+        return 'This is a Python Flask Application with Redis accessed through Nginx'
+
+    @app.route('/visitor')
+    def visitor():
+        redis.incr('visitor')
+        visitor_num = redis.get('visitor').decode("utf-8")
+        return "Visit Number = : %s" % (visitor_num)
+
+    @app.route('/visitor/reset')
+    def reset_visitor():
+        redis.set('visitor', 0)
+        visitor_num = redis.get('visitor').decode("utf-8")
+        return "Visitor Count has been reset to %s" % (visitor_num)
+    ```
+
+7. **Create the `requirements.txt` file**
+    ```bash
+    vim requirements.txt
+    ```
+
+    Add the following:
+    ```txt
+    redis==3.4.1
+    gunicorn>=20,<21
+    Flask==2.0.3
+    ```
+
+8. **Install dependencies**
+
+    ```bash
+    pip3 install -r requirements.txt 
+    ```
+    You will face an issue here; ignore it and proceed. We will use Python Virtual Environment
+
+    ```bash
+    sudo apt install python3-venv
+    ```
+
+    ```bash
+    python3 -m venv venv
+    ```
+
+    ```bash
+    source venv/bin/activate
+    ```
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+9. **Run the app using Gunicorn**
+    ```bash
+    gunicorn -w 4 -b 0.0.0.0:8000 main:app
+    ```
+
+    You will face an issue here. We will fix it by adding the dependency in requirements.txt
+
+10. **Freeze the dependencies (optional)**
+    ```bash
+    pip3 freeze
+    ```
+
+11. **Update the `requirements.txt` if necessary**
+
+    update the requirements.txt
+
+    ```bash
+    vim requirements.txt
+    ```
+        
+    ```txt
+    redis==3.4.1
+    gunicorn>=20,<21
+    Flask==2.0.3
+    Werkzeug==2.0.3
+    ```
+
+12. **Configure Nginx for proxying requests to the Flask app**
+    ```bash
+    sudo vim /etc/nginx/sites-available/my_flask_app
+    ```
+
+    Add the following configuration:
+    ```nginx
+    server {
+        listen 80;
+        server_name localhost;
+
+        location / {
+            proxy_pass http://127.0.0.1:8000;
+        }
+
+        location /hit {
+            proxy_pass http://127.0.0.1:8000/visitor;
+        }
+
+        location /hit/reset {
+            proxy_pass http://127.0.0.1:8000/visitor/reset;
+        }
+    }
+    ```
+
+13. **Link the Nginx configuration and restart Nginx**
+    ```bash
+    sudo ln -s /etc/nginx/sites-available/my_flask_app /etc/nginx/sites-enabled/
+    ```
+
+    ```bash
+    sudo nginx -t
+    ```
+
+    ```bash
+    sudo rm /etc/nginx/sites-enabled/default
+    ```
+
+    ```bash
+    sudo systemctl restart nginx
+    ```
+
+15. **Access the application**
+    - **Home Page:** `http://EC2-Public-IP:80/`
+    - **Hit Endpoint:** `http://EC2-Public-IP:80/hit`
+    - **Reset Endpoint:** `http://EC2-Public-IP:80/hit/reset`
+
+
+<br> Hope you observed the complexity and issues we faced during the manual setup. Imagine replicating this process on multiple Development, QA, and Production machines. This is where Docker simplifies and streamlines the deployment process.
+
+</details>
+
+
+
+
+## Dockerized Setup Instructions
 
 ### Create an EC2 Instance on AWS
 

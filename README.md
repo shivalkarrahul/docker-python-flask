@@ -98,7 +98,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     ```
 
     ```bash
-    sudo apt install python3-pip nginx redis-server
+    sudo apt install python3-pip nginx redis-server -y
     ```
 
 2. **Create directories and files for the Flask app**
@@ -171,7 +171,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     You will face an issue here; ignore it and proceed. We will use Python Virtual Environment
 
     ```bash
-    sudo apt install python3-venv
+    sudo apt install python3-venv -y
     ```
 
     ```bash
@@ -212,6 +212,10 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     Flask==2.0.3
     Werkzeug==2.0.3
     ```
+
+    ```bash
+    pip3 install -r requirements.txt 
+    ```    
 
 9. **Configure Nginx for proxying requests to the Flask app**
     ```bash

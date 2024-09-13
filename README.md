@@ -490,4 +490,12 @@ To stop the application and clean up:
 
 
 Feel free to reach out if you encounter any issues or have questions!    
+
+## Kubernetes Setup Instructions (Coming Soon)
+
+<details>
+  <summary>While Kubernetes setup is not covered in this guide, it's a powerful tool for orchestrating containerized applications. If you enjoyed this guide and find the Docker setup valuable, you might be interested in exploring Kubernetes for advanced features like scaling, managing, and automating containerized applications. Should you wish to dive deeper into Kubernetes, I’d be glad to include it in future updates to this repository.</summary>
+
+</details>
+
     

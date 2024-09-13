@@ -90,8 +90,9 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     ```bash
     ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@<EC2-Public-IP>
     ```
+### Setup Application on the EC2 Instance
 
-3. **Update and install necessary packages**
+1. **Update and install necessary packages**
     ```bash
     sudo apt update
     ```
@@ -100,7 +101,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     sudo apt install python3-pip nginx redis-server
     ```
 
-4. **Create directories and files for the Flask app**
+2. **Create directories and files for the Flask app**
     ```bash
     mkdir -p ~/my_flask_app
     ```
@@ -121,7 +122,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     touch requirements.txt main.py
     ```
 
-6. **Edit the `main.py` file**
+3. **Edit the `main.py` file**
     ```bash
     vim main.py
     ```
@@ -150,7 +151,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
         return "Visitor Count has been reset to %s" % (visitor_num)
     ```
 
-7. **Create the `requirements.txt` file**
+4. **Create the `requirements.txt` file**
     ```bash
     vim requirements.txt
     ```
@@ -162,7 +163,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     Flask==2.0.3
     ```
 
-8. **Install dependencies**
+5. **Install dependencies**
 
     ```bash
     pip3 install -r requirements.txt 
@@ -185,19 +186,19 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     pip install -r requirements.txt
     ```
 
-9. **Run the app using Gunicorn**
+6. **Run the app using Gunicorn**
     ```bash
     gunicorn -w 4 -b 0.0.0.0:8000 main:app
     ```
 
     You will face an issue here. We will fix it by adding the dependency in requirements.txt
 
-10. **Freeze the dependencies (optional)**
+7. **Freeze the dependencies (optional)**
     ```bash
     pip3 freeze
     ```
 
-11. **Update the `requirements.txt` if necessary**
+8. **Update the `requirements.txt` if necessary**
 
     update the requirements.txt
 
@@ -212,7 +213,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     Werkzeug==2.0.3
     ```
 
-12. **Configure Nginx for proxying requests to the Flask app**
+9. **Configure Nginx for proxying requests to the Flask app**
     ```bash
     sudo vim /etc/nginx/sites-available/my_flask_app
     ```
@@ -237,7 +238,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     }
     ```
 
-13. **Link the Nginx configuration and restart Nginx**
+10. **Link the Nginx configuration and restart Nginx**
     ```bash
     sudo ln -s /etc/nginx/sites-available/my_flask_app /etc/nginx/sites-enabled/
     ```
@@ -254,7 +255,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     sudo systemctl restart nginx
     ```
 
-15. **Access the application**
+11. **Access the application**
     - **Home Page:** `http://EC2-Public-IP:80/`
     - **Hit Endpoint:** `http://EC2-Public-IP:80/hit`
     - **Reset Endpoint:** `http://EC2-Public-IP:80/hit/reset`

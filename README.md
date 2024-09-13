@@ -215,9 +215,14 @@ In this setup, Redis is used solely to keep track of the application hit count. 
 
     ```bash
     pip3 install -r requirements.txt 
+    ```
+
+9. **Run the app using Gunicorn**
+    ```bash
+    gunicorn -w 4 -b 0.0.0.0:8000 main:app
     ```    
 
-9. **Configure Nginx for proxying requests to the Flask app**
+10. **Configure Nginx for proxying requests to the Flask app**
     ```bash
     sudo vim /etc/nginx/sites-available/my_flask_app
     ```
@@ -242,7 +247,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     }
     ```
 
-10. **Link the Nginx configuration and restart Nginx**
+11. **Link the Nginx configuration and restart Nginx**
     ```bash
     sudo ln -s /etc/nginx/sites-available/my_flask_app /etc/nginx/sites-enabled/
     ```
@@ -259,10 +264,15 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     sudo systemctl restart nginx
     ```
 
-11. **Access the application**
-    - **Home Page:** `http://EC2-Public-IP:80/`
-    - **Hit Endpoint:** `http://EC2-Public-IP:80/hit`
-    - **Reset Endpoint:** `http://EC2-Public-IP:80/hit/reset`
+12. **Access the application**
+
+Once the Nginx, Python and Redis services are running, you can access the application through your web browser:
+
+- **Home Page:** [http://EC2-Public-IP:80/](http://EC2-Public-IP:80/)
+- **Hit Endpoint:** [http://EC2-Public-IP:80/hit](http://EC2-Public-IP:80/hit)
+- **Reset Endpoint:** [http://EC2-Public-IP:80/hit/reset](http://EC2-Public-IP:80/hit/reset)
+
+Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
 
 
 <br> Hope you observed the complexity and issues we faced during the manual setup. Imagine replicating this process on multiple Development, QA, and Production machines. This is where Docker simplifies and streamlines the deployment process.

@@ -1,10 +1,25 @@
 # docker-python-flask
 
-Dockerize Your Flask Python Application
+This project demonstrates how to Dockerize a Flask application and set it up on an AWS EC2 instance. 
+
+The goal is to first make you familiar with the manual setup of the application, providing a solid understanding of how each component works individually. Once you’re comfortable with the manual process, you’ll then learn how to streamline and simplify deployment using Docker. 
+
+This README provides comprehensive instructions for both manual setup and Dockerized deployment. 
+
+You will find detailed instructions for:
+
+**Manual Setup**: Learn how to set up the Flask application manually without Docker, which provides insight into the configuration and challenges of a traditional deployment.
+
+**Dockerized Setup**: Understand how to simplify and streamline deployment using Docker and Docker Compose, including detailed steps for running and managing containers.
 
 ## Overview
 
-This project demonstrates how to Dockerize a Flask application and set it up on an AWS EC2 instance. You can choose to run the application either manually using `docker run` commands or easily with Docker Compose.
+This project provides two approaches to setting up a Flask application:
+
+**Manual Setup**: Run the application and its components manually on an AWS EC2 instance.
+
+**Dockerized Setup**: Use Docker and Docker Compose on an AWS EC2 instance to automate the deployment process, ensuring a consistent and reproducible environment.
+
 
 ## Architectural Diagram
 
@@ -250,9 +265,10 @@ In this setup, Redis is used solely to keep track of the application hit count. 
 </details>
 
 
-
-
 ## Dockerized Setup Instructions
+
+<details>
+  <summary>To understand how to streamline the deployment of the application using Docker, you can expand this section.</summary>
 
 ### Create an EC2 Instance on AWS
 
@@ -433,6 +449,12 @@ For a simpler setup, you can use Docker Compose to manage all containers with a 
     docker compose up -d
     ```
 
+- **Stop Containers:**
+
+    ```bash
+    docker compose down
+    ```    
+
 Once the application containers are running, you can access the application through your web browser:
 
 - **Home Page:** [http://EC2-Public-IP:80/](http://EC2-Public-IP:80/)
@@ -441,18 +463,13 @@ Once the application containers are running, you can access the application thro
 
 Replace `EC2-Public-IP` with your EC2 instance's actual public IP address.
 
+</details>
 
-### Cleanup
+## Cleanup
 
 To stop the application and clean up:
 
-1. **Stop Containers:**
-
-    ```bash
-    docker compose down
-    ```
-
-2. **Terminate the EC2 Instance:**
+1. **Terminate the EC2 Instances:**
 
     Go to the AWS Management Console and terminate the EC2 instance to avoid incurring additional charges.
 

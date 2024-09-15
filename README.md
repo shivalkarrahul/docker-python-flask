@@ -478,7 +478,107 @@ Once the application containers are running, you can access the application thro
 
 Replace `EC2-Public-IP` with your EC2 instance's actual public IP address.
 
+### Storing and Sharing Docker Images with ECR
+
+This section covers how to store and share your Docker images using AWS Elastic Container Registry (ECR). ECR is a fully-managed container registry that makes it easy to store, manage, and deploy Docker container images.
+
+#### Step 1: Create and Attach a Role to the EC2 Instance for ECR Access
+To allow an EC2 instance to push/pull images from ECR, you need to attach an appropriate IAM role with ECR permissions.
+
+1. Go to the **IAM console**, choose **Create Role > AWS service > Select EC2 in Service or use case Drop Down > Select EC2 in Use Case > Click Next**
+2. Search and Select `AmazonEC2ContainerRegistryFullAccess`, then click on the **Next** button.
+3. Give a name to the role (e.g. `demo-ecr-role`) and Click on the **Create Role** button.
+4. Go to your **EC2 instance**, choose **Actions > Security > Modify IAM Role** and assign the newly created role.
+
+Now, your EC2 instance has permissions to interact with ECR, allowing you to push and pull images.
+
+
+#### Step 2: Create an ECR Repository
+To store your Docker images, you first need to create an ECR repository.
+
+1. Search and Open the **Amazon ECR**.
+2. Choose **Create repository**.
+3. Enter a **name** for your repository (e.g., `my-python-flask-app`).
+4. Keep the other settings to default.
+5. Click **Create repository**.
+
+#### Step 3: Authenticate Docker to ECR
+Once the repository is created, authenticate Docker to your ECR registry by running the following AWS CLI command:
+
+Syntax: 
+```bash
+aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<your-region>.amazonaws.com
+```
+
+Replace `your-region` and `aws-account-id` with your specific AWS region and account ID.
+
+The command will fail here, as we don't have `aws cli` on our machine. Install `aws cli` using the following commands.
+
+
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+```
+
+```bash
+unzip awscliv2.zip
+```
+
+This will also fail as we dont have `unzip` command on our machine. Install `unzip` using the following command.
+
+```bash
+sudo apt install unzip
+```
+
+```bash
+unzip awscliv2.zip
+```
+
+```bash
+sudo ./aws/install
+```
+
+Now, again try to login
+
+Syntax: 
+```bash
+aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<your-region>.amazonaws.com
+```
+
+Replace `your-region` and `aws-account-id` with your specific AWS region and account ID.
+
+
+#### Step 3: Tag and Push Docker Images to ECR
+
+Tag your Docker image so that it points to your ECR repository:
+
+First, let's list the images.
+
+```bash
+docker images
+```
+Now, let's tag the images
+
+Syntax:
+
+```bash
+docker tag <local-image>:<tag> <aws-account-id>.dkr.ecr.<your-region>.amazonaws.com/<repository-name>:<tag>
+```
+
+Then, push the image to the ECR repository:
+
+Syntax:
+
+```bash
+docker push <aws-account-id>.dkr.ecr.<your-region>.amazonaws.com/<repository-name>:<tag>
+```
+
+**Note:** In this guide, we created only one repository and pushed a single image to ECR. However, since we also have images for Nginx and Redis, you can create separate repositories for these services and push their images as well, if needed.
+
 </details>
+
+
+
+
 
 ## Cleanup
 

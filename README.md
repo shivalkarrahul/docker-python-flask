@@ -27,6 +27,24 @@ The architectural diagram below illustrates the components and their interaction
 
 ![Architectural Diagram](images/architecture-diagram.png)
 
+**Note:** Before we begin, please fork the repository https://github.com/shivalkarrahul/docker-python-flask. The reason for forking will be explained at the end of the document.
+
+Here are the steps to fork the repository:
+
+1. Log in to GitHub:
+   Go to GitHub and sign in to your account. If you don't have an account, create one.
+   
+3. Navigate to the Repository:
+   Visit the repository you want to fork by clicking this link: https://github.com/shivalkarrahul/docker-python-flask.
+   
+3. Fork the Repository:
+   On the top-right corner of the repository page, click the Fork button.
+   
+4. GitHub will create a copy of the repository under your account.
+
+
+
+
 ## Understand the Application
 
 <details>
@@ -595,6 +613,22 @@ Feel free to reach out if you encounter any issues or have questions!
 
 <details>
   <summary>While Kubernetes setup is not covered in this guide, it's a powerful tool for orchestrating containerized applications. If you enjoyed this guide and find the Docker setup valuable, you might be interested in exploring Kubernetes for advanced features like scaling, managing, and automating containerized applications. Should you wish to dive deeper into Kubernetes, I’d be glad to include it in future updates to this repository.</summary>
+
+</details>
+
+## Reason for Forking the Repository:
+
+<details>
+
+<summary> Click here to know the reasons to fork the repository </summary>
+
+<br> Forking the repository allows you to create a personal copy of the project under your own GitHub account. This gives you the flexibility to:
+
+* Experiment with the code without affecting the original repository.
+  
+* Make changes, improvements, or adjustments to suit your own project requirements.
+  
+* Contribute back to the original project by submitting a pull request if you would like your changes to be reviewed and potentially merged.
 
 </details>
 

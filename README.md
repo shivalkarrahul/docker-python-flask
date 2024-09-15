@@ -43,8 +43,6 @@ Here are the steps to fork the repository:
 4. GitHub will create a copy of the repository under your account.
 
 
-
-
 ## Understand the Application
 
 <details>
@@ -141,6 +139,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     ```
 
 3. **Edit the `main.py` file**
+   
     ```bash
     vim main.py
     ```
@@ -169,7 +168,23 @@ In this setup, Redis is used solely to keep track of the application hit count. 
         return "Visitor Count has been reset to %s" % (visitor_num)
     ```
 
-4. **Create the `requirements.txt` file**
+<details>
+  <summary> Instructions for vim command </summary>
+
+1. Open the file using `vim` command
+2. Enter Insert Mode:
+
+   * Press `i` to go into Insert Mode and start editing the file. 
+
+3. Save and Exit:
+
+   * Press `Esc` to exit Insert Mode.
+   * Type `:wq` and press `Enter` to save and exit.
+   * If you want to save without exiting, type `:w`.
+   * To quit without saving changes, use `:q!`.
+</details>
+
+5. **Create the `requirements.txt` file**
     ```bash
     vim requirements.txt
     ```
@@ -181,7 +196,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     Flask==2.0.3
     ```
 
-5. **Install dependencies**
+6. **Install dependencies**
 
     ```bash
     pip3 install -r requirements.txt 
@@ -204,19 +219,19 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     pip install -r requirements.txt
     ```
 
-6. **Run the app using Gunicorn**
+7. **Run the app using Gunicorn**
     ```bash
     gunicorn -w 4 -b 0.0.0.0:8000 main:app
     ```
 
     You will face an issue here. We will fix it by adding the dependency in requirements.txt
 
-7. **Freeze the dependencies (optional)**
+8. **Freeze the dependencies (optional)**
     ```bash
     pip3 freeze
     ```
 
-8. **Update the `requirements.txt` if necessary**
+9. **Update the `requirements.txt` if necessary**
 
     update the requirements.txt
 
@@ -235,12 +250,14 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     pip3 install -r requirements.txt 
     ```
 
-9. **Run the app using Gunicorn**
+10. **Run the app using Gunicorn**
     ```bash
     gunicorn -w 4 -b 0.0.0.0:8000 main:app
     ```    
 
-10. **Configure Nginx for proxying requests to the Flask app**
+**Note:**  Keep the Flask application running in the current session. Open a new terminal session and reconnect to the EC2 instance.
+
+11. **Configure Nginx for proxying requests to the Flask app**
     ```bash
     sudo vim /etc/nginx/sites-available/my_flask_app
     ```
@@ -265,7 +282,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     }
     ```
 
-11. **Link the Nginx configuration and restart Nginx**
+12. **Link the Nginx configuration and restart Nginx**
     ```bash
     sudo ln -s /etc/nginx/sites-available/my_flask_app /etc/nginx/sites-enabled/
     ```
@@ -282,7 +299,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     sudo systemctl restart nginx
     ```
 
-12. **Access the application**
+13. **Access the application**
 
 Once the Nginx, Python and Redis services are running, you can access the application through your web browser:
 
@@ -292,11 +309,24 @@ Once the Nginx, Python and Redis services are running, you can access the applic
 
 Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
 
-
-<br> Hope you observed the complexity and issues we faced during the manual setup. Imagine replicating this process on multiple Development, QA, and Production machines. This is where Docker simplifies and streamlines the deployment process.
+14. **Stop the Applicatoin**
+   
+    Stop Nginx
+       ```bash
+       sudo service nginx  stop
+       ```
+    Stop Redis
+       ```bash
+       sudo service redis  stop
+       ```
+   
+    Stop Flask Application
+       <br> Press `Ctrl + C` in the terminal where `gunicorn -w 4 -b 0.0.0.0:8000 main:app` is running.
 
 </details>
 
+
+<br> Hope you observed the complexity and issues we faced during the manual setup. Imagine replicating this process on multiple Development, QA, and Production machines. This is where Docker simplifies and streamlines the deployment process.
 
 ## Dockerized Setup Instructions
 
@@ -338,7 +368,7 @@ Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
         ```
 
         ```bash
-        sudo apt-get install ca-certificates curl
+        sudo apt-get install ca-certificates curl -y
         ```
 
     - **Add Docker’s GPG key:**
@@ -360,7 +390,7 @@ Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
         ```
 
         ```bash
-        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
         ```
 
     - **Verify Docker Installation:**
@@ -564,6 +594,7 @@ aws ecr get-login-password --region <your-region> | docker login --username AWS 
 
 Replace `your-region` and `aws-account-id` with your specific AWS region and account ID.
 
+**Note:** You should see the `Login Succeeded` message at the end of the logs after executing the above command.
 
 #### Step 3: Tag and Push Docker Images to ECR
 

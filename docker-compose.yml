@@ -1,25 +1,32 @@
-version: '3'
+version: '3'  # Specifies the Docker Compose file version
+
 services:
+  # Flask application service
   app:
-    build: flask
+    build: flask  # Build the 'app' service using the Dockerfile in the 'flask' directory
     volumes:
-      - app:/app
-    ports:      
-      - "8000:8000"
-    links:
-      - redis:redis
-    depends_on:
-      - redis
-  redis:
-    image: "redis:alpine"
-    expose:
-      - "6379"
-  proxy:
-    build: nginx
-    restart: always
+      - app:/app  # Mount the 'app' volume to the '/app' directory in the container
     ports:
-      - 80:80
+      - "8000:8000"  # Expose port 8000 on the host and map it to port 8000 in the container
+    links:
+      - redis:redis  # Link the 'app' service to the 'redis' service by hostname
     depends_on:
-      - app
+      - redis  # Ensure the 'redis' service starts before the 'app' service
+    
+  # Redis service for caching and storing hit counts
+  redis:
+    image: "redis:alpine"  # Use the lightweight Alpine version of the Redis image
+    expose:
+      - "6379"  # Expose port 6379 for communication within the Docker network (not externally)
+
+  # Nginx reverse proxy service
+  proxy:
+    build: nginx  # Build the 'proxy' service using the Dockerfile in the 'nginx' directory
+    restart: always  # Automatically restart the container if it stops or crashes
+    ports:
+      - 80:80  # Map port 80 on the host to port 80 in the container for HTTP traffic
+    depends_on:
+      - app  # Ensure the 'app' service is running before starting the 'proxy' service
+
 volumes:
-  app:
+  app:  # Define the 'app' volume that is shared with the 'app' service to persist data

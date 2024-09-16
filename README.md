@@ -663,4 +663,15 @@ Feel free to reach out if you encounter any issues or have questions!
 
 </details>
 
+## Let’s Connect:
+
+- **👤 Name**: Rahul Shivalkar  
+- **🔗 LinkedIn**: [www.linkedin.com/in/rahul-shivalkar](https://www.linkedin.com/in/rahul-shivalkar)
+
+![LinkedInQR](images/my-linkedin-qr.png)
+
+
+
+
+
     

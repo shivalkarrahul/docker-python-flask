@@ -101,11 +101,16 @@ In this setup, Redis is used solely to keep track of the application hit count. 
     chmod 400 ~/Downloads/workshop-docker-python-flask.pem
     ```
 
-2. **SSH into Your EC2 Instance:**
+2. **SSH into Your EC2 Instance using Terminal:**
 
     ```bash
     ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@<EC2-Public-IP>
     ```
+or
+
+2. **SSH into Your EC2 Instance from Windows using Putty:**
+   - **AWS Guide:** [Step to Connect](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-linux-inst-from-windows.html#putty-prereqs)
+   
 ### Setup Application on the EC2 Instance
 
 1. **Update and install necessary packages**
@@ -351,11 +356,15 @@ Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
     chmod 400 ~/Downloads/workshop-docker-python-flask.pem
     ```
 
-2. **SSH into Your EC2 Instance:**
+2. **SSH into Your EC2 Instance using Terminal:**
 
     ```bash
     ssh -i ~/Downloads/workshop-docker-python-flask.pem ubuntu@<EC2-Public-IP>
     ```
+or
+
+2. **SSH into Your EC2 Instance from Windows using Putty:**
+   - **AWS Guide:** [Step to Connect](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-linux-inst-from-windows.html#putty-prereqs)
 
 ### Setup Docker on the EC2 Instance
 

@@ -90,7 +90,7 @@ In this setup, Redis is used solely to keep track of the application hit count. 
 3. **Volume Size:** 30 GB (8 GB will also work)
 4. **Instance Type:** t2.medium (t2.micro is also acceptable)
 5. **Subnet:** Public
-6. **SSH Key:** `workshop-docker-python-flask.pem` (Download the key on your machine)
+6. **SSH Key:** `workshop-docker-python-flask` (Download the key on your machine - Download .ppk if you are having a Windows Machine)
 7. **Security Group:** Allow SSH (port 22) and HTTP (port 80) for your IP
 
 ### Commands on Your Local Machine
@@ -345,7 +345,7 @@ Replace `EC2-Public-IP` with your EC2 instance's actual public IP addres
 3. **Volume Size:** 30 GB (8 GB will also work)
 4. **Instance Type:** t2.medium (t2.micro is also acceptable)
 5. **Subnet:** Public
-6. **SSH Key:** `workshop-docker-python-flask.pem` (Download the key on your machine)
+6. **SSH Key:** `workshop-docker-python-flask` (Download the key on your machine - Download .ppk if you are having a Windows Machine)
 7. **Security Group:** Allow SSH (port 22) and HTTP (port 80) for your IP
 
 ### Commands on Your Local Machine

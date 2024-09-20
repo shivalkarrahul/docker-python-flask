@@ -52,7 +52,7 @@ Here are the steps to fork the repository:
 
 The Flask application is a Python web application built using the Flask framework. Flask is a lightweight web framework that is easy to set up and scale. It is used here to create a simple web service with a few endpoints.
 
-**Files in the Flask Folder:**
+**Files in the Flask Folder:(For the Dockerized Setup)**
 
 - **`Dockerfile`**: This file contains the instructions to build a Docker image for the Flask application. It sets up the environment, installs dependencies, and defines how to run the Flask application.
 
@@ -64,7 +64,7 @@ The Flask application is a Python web application built using the Flask framewor
 
 Nginx is used as a reverse proxy server to forward requests to the Flask application. It handles incoming HTTP requests and directs them to the Flask application container.
 
-**Files in the Nginx Folder:**
+**Files in the Nginx Folder:(For the Dockerized Setup)**
 
 - **`Dockerfile`**: This file contains the instructions to build a Docker image for the Nginx server. It sets up Nginx with the required configuration to serve as a reverse proxy.
 
